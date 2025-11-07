@@ -1,6 +1,7 @@
 import Link from "next/link"
 import styles from "./Header.module.css"
 import TagsMenu from "../TagsMenu/TagsMenu"
+import AuthNavigation from "../AuthNavigation/AuthNavigation";
 
 type Props = {
   tags?: string[];
@@ -26,6 +27,7 @@ return (
         <li>
           {tags && onSelectedTag && <TagsMenu tags={tags} onSelectedTag={onSelectedTag} />}
         </li>
+        <AuthNavigation />
       </ul>
     </nav>
   </header>
