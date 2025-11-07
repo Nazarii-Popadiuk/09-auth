@@ -1,5 +1,5 @@
 'use client'
-import { login, LoginRequest } from '@/lib/clientApi';
+import { login, LoginRequest } from '@/lib/api/clientApi';
 import styles from './SignInPage.module.css'
 import { ApiError } from '@/app/api/api';
 import { useRouter } from 'next/navigation';

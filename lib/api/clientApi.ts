@@ -1,6 +1,6 @@
 import axios from "axios"
-import type { Note } from "../types/note";
-import { User } from "../types/note";
+import type { Note } from "../../types/note";
+import { User } from "../../types/note";
 import { api } from "./api";
 
 
