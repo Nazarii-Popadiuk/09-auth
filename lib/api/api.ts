@@ -1,10 +1,8 @@
 import axios from "axios"
 
 
-
-
 export const api = axios.create({
-  baseURL: 'https://next-v1-notes-api.goit.study',
+  baseURL: `${process.env.NEXT_PUBLIC_API_URL}/api`,
   withCredentials: true,
 });
 

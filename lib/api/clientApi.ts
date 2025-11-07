@@ -1,4 +1,3 @@
-import axios from "axios"
 import type { Note } from "../../types/note";
 import { User } from "../../types/user";
 import { api } from "./api";
@@ -19,7 +18,7 @@ interface FetchNotesProps {
 export type RegisterRequest = {
   email: string;
   password: string;
-  userName: string;
+  username: string;
 };
 
 export type LoginRequest = {
@@ -32,7 +31,7 @@ type CheckSessionRequest = {
 };
 
 export type UpdateUserRequest = {
-  userName?: string;
+  username?: string;
   photoUrl?: string;
 };
 
@@ -40,7 +39,7 @@ export const fetchNotes = async (search?: string, page: number = 1, tag?: string
 const params: Record<string, string | number> = { search: search || '', page };
     if (tag) params.tag = tag;
 
-    const response = await axios.get<FetchNotesProps>(API_URL, 
+    const response = await api.get<FetchNotesProps>(`${API_URL}/notes`, 
         {params,
         headers: {
         Authorization: `Bearer ${token}`
@@ -51,7 +50,7 @@ const params: Record<string, string | number> = { search: search || '', page };
 }
 
 export const createNote = async (title: string, content: string, tag: string): Promise<Note> => {
-    const response = await axios.post<Note>(API_URL, 
+  const response = await api.post<Note>(`${API_URL}/notes`, 
         { title, content, tag }, {
         headers: {
             Authorization: `Bearer ${token}`
@@ -62,7 +61,7 @@ export const createNote = async (title: string, content: string, tag: string): P
 }
 
 export const deleteNote = async (id: string): Promise<Note> => {
-    const response = await axios.delete<Note>(`${API_URL}/${id}`, {
+    const response = await api.delete<Note>(`${API_URL}/notes/${id}`, {
         headers: {
             Authorization: `Bearer ${token}`
         }
@@ -71,7 +70,7 @@ export const deleteNote = async (id: string): Promise<Note> => {
 }
 
 export const fetchNoteById = async (id: string): Promise<Note> => {
-    const res = await axios.get<Note>(`${API_URL}/${id}`, {
+    const res = await api.get<Note>(`${API_URL}/notes/${id}`, {
         headers: {
             Authorization: `Bearer ${token}`
         }
@@ -79,13 +78,6 @@ export const fetchNoteById = async (id: string): Promise<Note> => {
     return res.data
 }
 
-export const fetchTags = async (): Promise<string[]> => {
-  const response = await axios.get<{ tags: string[] }>(`${API_URL}/tags`, {
-    headers: { Authorization: `Bearer ${token}` },
-  })
-    return response.data.tags
-    
-}
 
 export const register = async (data: RegisterRequest) => {
   const res = await api.post<User>('/auth/register', data);
@@ -103,7 +95,7 @@ export const checkSession = async () => {
 };
 
 export const getMe = async () => {
-  const { data } = await api.get<User>('/auth/me');
+  const { data } = await api.patch<User>('/users/me');
   return data;
 };
 
@@ -112,6 +104,6 @@ export const logout = async (): Promise<void> => {
 };
 
 export const updateMe = async (payload: UpdateUserRequest) => {
-  const res = await api.put<User>('/auth/me', payload);
+  const res = await api.patch<User>('/users/me', payload);
   return res.data;
 };

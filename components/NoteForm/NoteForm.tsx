@@ -27,25 +27,29 @@ export default function NoteForm() {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
-    mutationFn: ({ title, content, tag }: {title: string, content: string, tag: string}) => 
-      createNote(title, content, tag),
+    mutationFn: (note: NoteDraft) => 
+      createNote(note.title, note.content, note.tag),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notes'] });
       clearDraft();
-      router.push('notes/filter/all')
+      router.push('/notes/filter/all')
     }
   })
 
-  const handleSubmit = (formData: FormData) => {
-    const values = Object.fromEntries(formData) as NoteDraft
-    mutate(values);
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const { title, content, tag } = draft;
+    mutate({title, content, tag} as NoteDraft)
   }
-  const handleCancel = () => router.push('/notes/filter/all')
+  const handleCancel = () => {
+    clearDraft();
+    router.push('/notes/filter/all')
+  }
     return (
-                <form className={styles.form} action={handleSubmit}>
+                <form className={styles.form} onSubmit={handleSubmit}>
   <div className={styles.formGroup}>
     <label htmlFor="title">Title</label>
-    <input id="title" type="text" name="title" className={styles.input} defaultValue={draft?.title} onChange={handleChange} />
+    <input id="title" type="text" name="title" className={styles.input} value={draft?.title || ''} onChange={handleChange} />
   </div>
 
   <div className={styles.formGroup}>
@@ -55,14 +59,14 @@ export default function NoteForm() {
       name="content"
       rows={8}
             className={styles.textarea}
-            defaultValue={draft?.content} onChange={handleChange}
+            value={draft?.content || ''} onChange={handleChange}
     ></textarea>
 
   </div>
 
   <div className={styles.formGroup}>
     <label htmlFor="tag">Tag</label>
-    <select id="tag" name="tag" className={styles.select} defaultValue={draft?.tag} onChange={handleChange}>
+    <select id="tag" name="tag" className={styles.select} value={draft?.tag || 'Todo'} onChange={handleChange}>
       <option value="Todo">Todo</option>
       <option value="Work">Work</option>
       <option value="Personal">Personal</option>

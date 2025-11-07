@@ -4,17 +4,27 @@ import styles from './EditProfilePage.module.css'
 import Image from 'next/image'
 import { getMe, updateMe } from '@/lib/api/clientApi';
 import { useEffect, useState } from 'react';
-import router from 'next/router';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/lib/store/authStore';
+import { User } from '@/types/user';
 
 
 export default function Edit() {
 
-  const [userName, setUserName] = useState('')
+
+  const router = useRouter();
+  const { setUser } = useAuthStore();
+  const [userName, setUserName] = useState('');
+  const [email, setEmail] = useState('');
+  const [avatar, setAvatar] = useState('');
 
   useEffect(() => {
-    getMe().then((user) => {
-      setUserName(user.username ?? '');
-    });
+    const fetchUser = async () => {
+      const userData: User = await getMe();
+      setUserName(userData.username ?? '');
+      setEmail(userData.email ?? '');
+      setAvatar(userData.avatar ?? '');
+    }; fetchUser()
   }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,7 +34,8 @@ export default function Edit() {
   const handleSaveUser = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      await updateMe({ userName });
+      const updatedUser = await updateMe({ username:userName });
+      setUser(updatedUser);
       router.push('/profile')
     } catch {
 alert('Impossible to save')
@@ -39,7 +50,7 @@ alert('Impossible to save')
   <div className={styles.profileCard}>
     <h1 className={styles.formTitle}>Edit Profile</h1>
 
-    <Image src=''
+    <Image src={avatar || 'default-avatar.png'}
       alt="User Avatar"
       width={120}
       height={120}
@@ -53,10 +64,11 @@ alert('Impossible to save')
           type="text"
                 className={styles.input}
                 onChange={handleChange}
+                value={userName}
         />
       </div>
 
-            <p>Email:</p>
+            <p>Email:{email || ''}</p>
 
       <div className={styles.actions}>
         <button type="submit" className={styles.saveButton}>
