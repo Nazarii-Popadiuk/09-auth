@@ -1,6 +1,6 @@
 
 import { create } from 'zustand';
-import { User } from '../../types/note';
+import { User } from '../../types/user';
 
 type AuthStore = {
   isAuthenticated: boolean;
