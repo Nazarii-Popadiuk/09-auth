@@ -6,9 +6,3 @@ export interface Note {
     updatedAt: string,
     tag: string
 }
-
-export type User = {
-    email: string;
-    username: string;
-    avatar: string;
-}
