@@ -1,4 +1,4 @@
-import { deleteNote } from '../../lib/api';
+import { deleteNote } from '../../lib/clientApi';
 import type { Note } from '../../types/note';
 import styles from './NoteList.module.css';
 import { useState } from 'react';

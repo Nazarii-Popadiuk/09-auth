@@ -1,7 +1,10 @@
+'use client'
+
 import styles from './EditProfilePage.module.css'
 import Image from 'next/image'
 import { getMe, updateMe } from '@/lib/clientApi';
 import { useEffect, useState } from 'react';
+import router from 'next/router';
 
 
 export default function Edit() {
@@ -20,9 +23,17 @@ export default function Edit() {
 
   const handleSaveUser = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    await updateMe({ userName});
+    try {
+      await updateMe({ userName });
+      router.push('/profile')
+    } catch {
+alert('Impossible to save')
+    }
   };
 
+  const handleCancel = () => {
+    router.push('/profile')
+  }
     return (
         <main className={styles.mainContent}>
   <div className={styles.profileCard}>
@@ -45,13 +56,13 @@ export default function Edit() {
         />
       </div>
 
-                    <p>Email:</p>
+            <p>Email:</p>
 
       <div className={styles.actions}>
         <button type="submit" className={styles.saveButton}>
           Save
         </button>
-        <button type="button" className={styles.cancelButton}>
+        <button type="button" className={styles.cancelButton} onClick={handleCancel}>
           Cancel
         </button>
       </div>

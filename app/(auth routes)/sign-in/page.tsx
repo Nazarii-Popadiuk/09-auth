@@ -1,3 +1,4 @@
+'use client'
 import { login, LoginRequest } from '@/lib/clientApi';
 import styles from './SignInPage.module.css'
 import { ApiError } from '@/app/api/api';

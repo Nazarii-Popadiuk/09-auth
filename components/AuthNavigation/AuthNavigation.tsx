@@ -1,3 +1,4 @@
+'use client'
 import Link from 'next/link'
 import styles from './AuthNavigation.module.css'
 import { useRouter } from 'next/navigation';
