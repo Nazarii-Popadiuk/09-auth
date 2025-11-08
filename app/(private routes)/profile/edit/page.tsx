@@ -43,7 +43,7 @@ alert('Impossible to save')
   };
 
   const handleCancel = () => {
-    router.push('/profile')
+    router.back()
   }
     return (
         <main className={styles.mainContent}>

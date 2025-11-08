@@ -95,7 +95,7 @@ export const checkSession = async () => {
 };
 
 export const getMe = async () => {
-  const { data } = await api.patch<User>('/users/me');
+  const { data } = await api.get<User>('/users/me');
   return data;
 };
 
